@@ -132,7 +132,7 @@ void ObtenerFuerzas(vector<Fuerza> &fuerzas, const vector<Carga> &cargas)
 
 	while (opc < 0 || opc >= cargas.size())
 	{
-		cout << "Introduzca el indice de la carga" << " [0-" << cargas.size() - 1 << "]" << endl
+		cout << "Introduzca el indice de la carga (Ctrl+C para salir)" << " [0-" << cargas.size() - 1 << "]" << endl
 			<< "-> ";
 		cin >> opc;
 	}
@@ -143,18 +143,11 @@ void ObtenerFuerzas(vector<Fuerza> &fuerzas, const vector<Carga> &cargas)
 		if (Index != i)
 		{
 			double distance = cargas.at(opc).pos.distanteTo(cargas.at(i).pos);
-			double Fx = Ke * (((cargas.at(opc).carga * 1.0E-6) * (cargas.at(i).carga * 1.0E-6)) / (distance * distance * distance))
-				* (cargas.at(i).pos.x - cargas.at(opc).pos.x);
-
-			double Fy = Ke * (((cargas.at(opc).carga * 1.0E-6) * (cargas.at(i).carga * 1.0E-6)) / (distance * distance * distance))
-				* (cargas.at(i).pos.y - cargas.at(opc).pos.y);
-
-			double Fz = Ke * (((cargas.at(opc).carga * 1.0E-6) * (cargas.at(i).carga * 1.0E-6)) / (distance * distance * distance))
-				* (cargas.at(i).pos.z - cargas.at(opc).pos.z);
+			double magnitud = Ke * (((cargas.at(opc).carga * 1.0E-6) * (cargas.at(i).carga * 1.0E-6)) / (distance * distance * distance));
 
 			Fuerza F;
-			F.pos = Vector3D(Fx, Fy, Fz);
-			F.magnitud = sqrt((Fx*Fx) + (Fy*Fy) + (Fz*Fz));
+			F.pos = magnitud * (cargas.at(i).pos - cargas.at(opc).pos);
+			F.magnitud = F.pos.length();
 			fuerzas.push_back(F);
 
 			fuerzaTotal.pos += F.pos;
