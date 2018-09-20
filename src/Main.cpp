@@ -13,27 +13,29 @@ struct Carga
 {
 	Vector3D pos;
 	double carga;
+	Carga() :carga(0.00){}
 };
 
 struct Fuerza
 {
 	Vector3D pos;
 	double magnitud;
+	Fuerza(double magnitud) :magnitud(magnitud){}
+	Fuerza() :magnitud(0.00){}
 };
-
-Fuerza fuerzaTotal;
 
 char ObtenerOpciones();
 void IntroducirCargas(vector<Carga> &cargas);
 void VerCargas(vector<Carga> &cargas);
-void ObtenerFuerzas(vector<Fuerza> &fuerzas, const vector<Carga> &cargas, const Carga &carga);
+void ObtenerFuerzas(vector<Fuerza> &fuerzas, const vector<Carga> &cargas);
 
 int main()
 {
 	vector<Carga> cargas;
 	vector<Fuerza> fuerzas;
-	Carga cargaSeleccionada;
+
 	bool isRunning = true;
+
 	while (isRunning)
 	{
 		char opc = ObtenerOpciones();
@@ -53,24 +55,15 @@ int main()
 
 		case 3:
 			fuerzas.clear();
-			ObtenerFuerzas(fuerzas, cargas,cargaSeleccionada);
+			ObtenerFuerzas(fuerzas, cargas);
 			break;
 
 		case 4:
-			int opc;
-			cout << "Introduzca el indice de la carga" << endl
-				 << "-> ";
-			cin >> opc;
-			Index = opc;
-			cargaSeleccionada = cargas[opc];
-			break;
-
-		case 5:
-			// for (size_t i = 0; i < fuerzas.size(); i++)
-			// {
-			// 	cout << fuerzas[i].magnitud << " : " << fuerzas[i].pos.toString() << endl;
-			// }
-			cout << fuerzaTotal.magnitud << " : " << fuerzaTotal.pos.toString() << endl;
+			cout << string(47, '-') << endl;
+			for (size_t i = 0; i < fuerzas.size(); i++)
+			{
+				cout << fuerzas.at(i).magnitud << " : " << fuerzas.at(i).pos.toString() << endl;
+			}
 			break;
 
 		default:
@@ -83,14 +76,13 @@ char ObtenerOpciones()
 {
 	int opc = 0;
 	cout << string(47, '-') << endl
-		 << "FuerzasElectricas por Victor D. Montero (18-09-2018)" << endl;
+		<< "FuerzasElectricas por Victor D. Montero (18-09-2018)" << endl;
 	cout << "1-Introducir Cargas" << endl
-		 << "2-Ver Cargas" << endl
-		 << "3-Obtener Fuerzas" << endl
-		 << "4-Seleccionar Carga" << endl
-		 << "5-Imprimir Fuerzas" << endl
-		 << "0-Salir" << endl
-		 << "-> ";
+		<< "2-Ver Cargas" << endl
+		<< "3-Calcular fuerzas e Imprimir fuerza total" << endl
+		<< "4-Imprimir Fuerzas" << endl
+		<< "0-Salir" << endl
+		<< "-> ";
 	cin >> opc;
 
 	return opc;
@@ -122,34 +114,52 @@ void VerCargas(vector<Carga> &cargas)
 	{
 		Carga carga = cargas[i];
 		cout << i << ": "
-			 << "<" << carga.pos.x << ", " << carga.pos.y << ", " << carga.pos.z
-			 << "> C=" << carga.carga << endl;
+			<< "<" << carga.pos.x << ", " << carga.pos.y << ", " << carga.pos.z
+			<< "> C=" << carga.carga << endl;
 	}
 }
 
-void ObtenerFuerzas(vector<Fuerza> &fuerzas, const vector<Carga> &cargas, const Carga &carga)
+void ObtenerFuerzas(vector<Fuerza> &fuerzas, const vector<Carga> &cargas)
 {
+	Fuerza fuerzaTotal = Fuerza();
+	int opc = -1;
+
+	if (cargas.empty())
+	{
+		cout << "Introduzca por lo menos dos cargas" << endl;
+		return;
+	}
+
+	while (opc < 0 || opc >= cargas.size())
+	{
+		cout << "Introduzca el indice de la carga" << " [0-" << cargas.size() - 1 << "]" << endl
+			<< "-> ";
+		cin >> opc;
+	}
+
 	cout << string(47, '-') << endl;
 	for (size_t i = 0; i < cargas.size(); i++)
 	{
 		if (Index != i)
 		{
-			double distance = carga.pos.distanteTo(cargas.at(i).pos);
-			double Fx = Ke * (((carga.carga * 1.0E-6) * (cargas.at(i).carga * 1.0E-6)) / (distance * distance * distance)) 
-			* (cargas.at(i).pos.x - carga.pos.x);
+			double distance = cargas.at(opc).pos.distanteTo(cargas.at(i).pos);
+			double Fx = Ke * (((cargas.at(opc).carga * 1.0E-6) * (cargas.at(i).carga * 1.0E-6)) / (distance * distance * distance))
+				* (cargas.at(i).pos.x - cargas.at(opc).pos.x);
 
-			double Fy = Ke * (((carga.carga * 1.0E-6) * (cargas.at(i).carga * 1.0E-6)) / (distance * distance * distance)) 
-			* (cargas.at(i).pos.y - carga.pos.y);
+			double Fy = Ke * (((cargas.at(opc).carga * 1.0E-6) * (cargas.at(i).carga * 1.0E-6)) / (distance * distance * distance))
+				* (cargas.at(i).pos.y - cargas.at(opc).pos.y);
 
-			double Fz = Ke * (((carga.carga * 1.0E-6) * (cargas.at(i).carga * 1.0E-6)) / (distance * distance * distance)) 
-			* (cargas.at(i).pos.z - carga.pos.z);
+			double Fz = Ke * (((cargas.at(opc).carga * 1.0E-6) * (cargas.at(i).carga * 1.0E-6)) / (distance * distance * distance))
+				* (cargas.at(i).pos.z - cargas.at(opc).pos.z);
 
 			Fuerza F;
-			F.pos = Vector3D(Fx,Fy,Fz);
-			F.magnitud = sqrt((Fx*Fx)+(Fy*Fy)+(Fz*Fz));
+			F.pos = Vector3D(Fx, Fy, Fz);
+			F.magnitud = sqrt((Fx*Fx) + (Fy*Fy) + (Fz*Fz));
+			fuerzas.push_back(F);
 
 			fuerzaTotal.pos += F.pos;
 			fuerzaTotal.magnitud += F.magnitud;
 		}
 	}
+	cout << fuerzaTotal.magnitud << " : " << fuerzaTotal.pos.toString() << endl;
 }
