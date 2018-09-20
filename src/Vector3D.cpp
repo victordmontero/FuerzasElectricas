@@ -117,6 +117,16 @@ double Vector3D::squareDistanteTo(const Vector3D &vec) const
 	return (*this - vec).squareLength();
 }
 
+double Vector3D::length() const
+{
+	return sqrt(squareLength());
+}
+
+double Vector3D::distanteTo(const Vector3D &vec) const
+{
+	return (*this-vec).length();
+}
+
 std::string Vector3D::toString() const
 {
 	std::string result;

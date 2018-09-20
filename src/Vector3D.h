@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <cstdio>
+#include <cmath>
 #include <cstring>
 
 class Vector3D
@@ -37,6 +38,8 @@ public:
   double dotProduct(const Vector3D &vec) const;
   double squareLength() const;
   double squareDistanteTo(const Vector3D &vec) const;
+  double length() const;
+  double distanteTo(const Vector3D &vec) const;
   std::string toString() const;
 };
 
