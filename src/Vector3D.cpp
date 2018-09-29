@@ -76,30 +76,40 @@ Vector3D &Vector3D::operator=(const Vector3D &right)
 	return *this;
 }
 
-bool Vector3D::operator==(const Vector3D &right)
+bool Vector3D::operator==(const Vector3D &right) const
 {
 	return right.x == x &&
 		   right.y == y &&
 		   right.z == z;
 }
 
-bool Vector3D::operator!=(const Vector3D &right)
+bool Vector3D::operator!=(const Vector3D &right) const
 {
 	return !(*this == right);
 }
 
-bool Vector3D::operator<(const Vector3D &right)
+bool Vector3D::operator<(const Vector3D &right) const
 {
 	return this->x < right.x &&
 		   this->y < right.y &&
 		   this->z < right.z;
 }
 
-bool Vector3D::operator>(const Vector3D &right)
+bool Vector3D::operator>(const Vector3D &right) const
 {
 	return this->x > right.x &&
 		   this->y > right.y &&
 		   this->z > right.z;
+}
+
+bool Vector3D::operator<=(const Vector3D& right) const
+{
+	return *this < right || *this == right;	
+}
+
+bool Vector3D::operator>=(const Vector3D& right) const
+{
+	return *this > right || *this == right;	
 }
 
 double Vector3D::dotProduct(const Vector3D &vec) const

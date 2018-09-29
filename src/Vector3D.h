@@ -30,10 +30,12 @@ public:
   Vector3D &operator/=(double right);
 
   Vector3D &operator=(const Vector3D &right);
-  bool operator==(const Vector3D &right);
-  bool operator!=(const Vector3D &right);
-  bool operator<(const Vector3D &right);
-  bool operator>(const Vector3D &right);
+  bool operator==(const Vector3D &right) const;
+  bool operator!=(const Vector3D &right) const;
+  bool operator<(const Vector3D &right) const;
+  bool operator>(const Vector3D &right) const;
+  bool operator<=(const Vector3D &right) const;
+  bool operator>=(const Vector3D &right) const;
 
   double dotProduct(const Vector3D &vec) const;
   double squareLength() const;
