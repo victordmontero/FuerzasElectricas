@@ -5,7 +5,6 @@
 #include "Vector3D.h"
 
 #define Ke 8987539422
-int Index = 0;
 
 using namespace std;
 
@@ -140,18 +139,18 @@ void ObtenerFuerzas(vector<Fuerza> &fuerzas, const vector<Carga> &cargas)
 	cout << string(47, '-') << endl;
 	for (size_t i = 0; i < cargas.size(); i++)
 	{
-		if (Index != i)
+		if (opc != i)
 		{
 			double distance = cargas.at(opc).pos.distanteTo(cargas.at(i).pos);
 			double magnitud = Ke * (((cargas.at(opc).carga * 1.0E-6) * (cargas.at(i).carga * 1.0E-6)) / (distance * distance * distance));
 
 			Fuerza F;
-			F.pos = magnitud * (cargas.at(i).pos - cargas.at(opc).pos);
+			F.pos = magnitud * (cargas.at(opc).pos - cargas.at(i).pos);
 			F.magnitud = F.pos.length();
 			fuerzas.push_back(F);
 
 			fuerzaTotal.pos += F.pos;
-			fuerzaTotal.magnitud += F.magnitud;
+			fuerzaTotal.magnitud = fuerzaTotal.pos.length();
 		}
 	}
 	cout << fuerzaTotal.magnitud << " : " << fuerzaTotal.pos.toString() << endl;
