@@ -143,7 +143,7 @@ std::string Vector3D::toString() const
 	char buffer[512 + 1] = {0};
 
 	// std::cout << x << std::endl;
-	result.push_back('(');
+	result.push_back('<');
 	sprintf(buffer, "%lf", x);
 	result += buffer;
 	result.push_back(',');
@@ -158,7 +158,7 @@ std::string Vector3D::toString() const
 	// std::cout << z << std::endl;
 	sprintf(buffer, "%lf", z);
 	result += buffer;
-	result.push_back(')');
+	result.push_back('>');
 	memset(buffer, 0, 513);
 
 	// std::cout << result.c_str() << std::endl;

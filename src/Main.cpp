@@ -113,8 +113,8 @@ void VerCargas(vector<Carga> &cargas)
 	{
 		Carga carga = cargas[i];
 		cout << i << ": "
-			<< "<" << carga.pos.x << ", " << carga.pos.y << ", " << carga.pos.z
-			<< "> C=" << carga.carga << endl;
+			<< carga.pos.toString()
+			<< " C=" << carga.carga << endl;
 	}
 }
 
