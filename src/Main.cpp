@@ -4,7 +4,7 @@
 #include <cmath>
 #include "Vector3D.h"
 
-#define Ke 8987539422
+#define Ke 9E9
 
 using namespace std;
 
@@ -181,7 +181,7 @@ void ObtenerFuerzas(vector<Fuerza> &fuerzas, const vector<Carga> &cargas)
 		if (opc != i)
 		{
 			double distance = cargas.at(opc).pos.distanteTo(cargas.at(i).pos);
-			double magnitud = Ke * (((cargas.at(opc).carga * 1.0E-6) * (cargas.at(i).carga * 1.0E-6)) / (distance * distance * distance));
+			double magnitud = Ke * (((cargas.at(opc).carga) * (cargas.at(i).carga)) / (distance * distance * distance));
 
 			Fuerza F;
 			F.pos = magnitud * (cargas.at(opc).pos - cargas.at(i).pos);
@@ -214,7 +214,7 @@ void ObtenerCampos(vector<CampoElectrico> &campos, const vector<Carga> &cargas)
 	for (size_t i = 0; i < cargas.size(); i++)
 	{
 		double distance = pos.distanteTo(cargas.at(i).pos);
-		double magnitud = Ke * (((cargas.at(i).carga * 1.0E-6)) / (distance * distance * distance));
+		double magnitud = Ke * (((cargas.at(i).carga)) / (distance * distance * distance));
 
 		CampoElectrico E;
 		E.pos = magnitud * (pos - cargas.at(i).pos);
@@ -230,7 +230,7 @@ void ObtenerCampos(vector<CampoElectrico> &campos, const vector<Carga> &cargas)
 
 void ObtenerPotencial(const vector<Carga> &cargas)
 {
-	double energiaTotal = 0;
+	double potencialTotal = 0;
 	Vector3D pos;
 
 	if (cargas.empty())
@@ -247,17 +247,17 @@ void ObtenerPotencial(const vector<Carga> &cargas)
 	for (size_t i = 0; i < cargas.size(); i++)
 	{
 		double distance = pos.distanteTo(cargas.at(i).pos);
-		double magnitud = Ke * (((cargas.at(i).carga*1.0E-6)) / distance);
+		double magnitud = Ke * (((cargas.at(i).carga)) / distance);
 
-		energiaTotal += magnitud;
+		potencialTotal += magnitud;
 	}
 
-	cout << "Energia en un Punto P" << pos.toString() << ":" << energiaTotal << " V (J/C)" << endl;
+	cout << "Energia en un Punto P" << pos.toString() << ":" << potencialTotal << " V (J/C)" << endl;
 }
 
 void ObtenerEnergia(const vector<Carga> &cargas)
 {
-	double potencialTotal = 0;
+	double energiaTotal = 0;
 
 	if (cargas.empty())
 	{
@@ -267,16 +267,13 @@ void ObtenerEnergia(const vector<Carga> &cargas)
 
 	for (size_t i = 0; i < cargas.size(); i++)
 	{
-		for (size_t j = 0; j < cargas.size(); j++)
+		for (size_t j = i; j < cargas.size(); j++)
 		{
-			if (i < j)
-			{
-				double distance = cargas.at(i).pos.distanteTo(cargas.at(j).pos);
-				double magnitud = Ke * (((cargas.at(i).carga * 1.0E-6)*(cargas.at(j).carga * 1.0E-6)) / distance);
+			double distance = cargas.at(i).pos.distanteTo(cargas.at(j).pos);
+			double magnitud = Ke * (((cargas.at(i).carga)*(cargas.at(j).carga)) / distance);
 
-				potencialTotal += magnitud;
-			}
+			energiaTotal += magnitud;
 		}
 	}
-	cout << "Energia Electrica:" << potencialTotal << " J" << endl;
+	cout << "Energia Electrica:" << energiaTotal << " J" << endl;
 }
